@@ -1,33 +1,34 @@
 #include "BST.h"
 #include <iostream>
 
-void BST::insert(int currentIndex, int value) {
+BST::BST() {
+    rootIndex = -1;
+}
+
+int BST::insert(int currentIndex, int value) {
     if (currentIndex == -1) {
         tree.push_back(Node(value));
-        currentIndex = tree.size() - 1;
-        return;
+        return static_cast<int>(tree.size()) - 1;
     }
+
     if (value < tree[currentIndex].value) {
-        insert(tree[currentIndex].left, value);
+        int nextLeft = insert(tree[currentIndex].left, value);
+        tree[currentIndex].left = nextLeft;
+    } else if (value > tree[currentIndex].value) {
+        int nextRight = insert(tree[currentIndex].right, value);
+        tree[currentIndex].right = nextRight;
     }
-    if (value > tree[currentIndex].value) {
-        insert(tree[currentIndex].right, value);
-    }
+
+    return currentIndex;
 }
 
 void BST::addNode(int value) {
-    insert(rootIndex, value);
+    rootIndex = insert(rootIndex, value);
 }
 
-void BST::show()
-{
-    for (int i = 0; i < tree.size(); i++) {
+void BST::show() {
+    for (size_t i = 0; i < tree.size(); i++) {
         std::cout << tree[i].value << " ";
     }
     std::cout << std::endl;
-}
-
-BST::BST()
-{
-    rootIndex = -1;
 }
