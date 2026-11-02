@@ -19,5 +19,14 @@ int main()
     std::cout << "Po usunieciu wezla 3: ";
     bst.show();
 
+    bst.removeTree();
+
+    std::cout << "Po usunieciu calego drzewa: ";
+    bst.show();
+
+    bst.addNode(42);
+
+    std::cout << "Po ponownym dodaniu 42: ";
+    bst.show();
     return 0;
 }
