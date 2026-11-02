@@ -5,4 +5,4 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 
-add_executable(Drzewo_BST)
+add_executable(Drzewo_BST main.cpp BST.cpp)
