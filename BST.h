@@ -16,12 +16,13 @@ private:
     std::vector<Node> tree;
     int rootIndex;
 
-    // Tutaj musi być int, a nie void:
     int insert(int currentIndex, int value);
 
 public:
     BST();
     void addNode(int value);
+    void removeNode(int value);
+    void removeTree();
     void show();
 };
 

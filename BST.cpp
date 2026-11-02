@@ -8,7 +8,7 @@ BST::BST() {
 int BST::insert(int currentIndex, int value) {
     if (currentIndex == -1) {
         tree.push_back(Node(value));
-        return static_cast<int>(tree.size()) - 1;
+        return (tree.size()) - 1;
     }
 
     if (value < tree[currentIndex].value) {
@@ -31,4 +31,14 @@ void BST::show() {
         std::cout << tree[i].value << " ";
     }
     std::cout << std::endl;
+}
+
+void BST::removeNode(int value)
+{
+
+}
+
+void BST::removeTree()
+{
+
 }
