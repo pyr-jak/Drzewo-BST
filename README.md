@@ -1,1 +1,1 @@
-# Drzewo-BST
+Algorytm drzewa BST
