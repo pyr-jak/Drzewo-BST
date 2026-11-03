@@ -1,0 +1,75 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\begin{document}
+
+\begin{center}
+    {\Large\textbf{Drzewo BST}}\\[4pt]
+    Dokumentacja metod usuwania
+\end{center}
+
+\section{Reprezentacja drzewa}
+
+Drzewo jest zaimplementowane w klasie \texttt{BST}.
+Węzły są przechowywane w kontenerze \texttt{std::vector<Node>}.
+Każdy węzeł zawiera wartość całkowitą oraz indeksy lewego
+i prawego dziecka. Indeks równy \texttt{-1} oznacza brak dziecka.
+Pole \texttt{rootIndex} wskazuje korzeń drzewa.
+
+\section{Usuwanie pojedynczego węzła}
+
+Metoda \texttt{removeNode(int value)} wyszukuje węzeł
+o podanej wartości i zapamiętuje jego rodzica.
+Jeżeli wartość nie występuje, drzewo pozostaje bez zmian.
+
+Po odnalezieniu węzła rozpatrywane są trzy przypadki:
+\begin{itemize}
+    \item Brak dzieci: połączenie od rodzica zostaje usunięte.
+    \item Jedno dziecko: rodzic zostaje połączony z tym dzieckiem.
+    \item Dwoje dzieci: wartość węzła zostaje zastąpiona minimum
+    prawego poddrzewa, po czym usuwany jest węzeł następnika.
+\end{itemize}
+
+Usuwanie korzenia wymaga odpowiedniej aktualizacji
+pola \texttt{rootIndex}. Fizyczne usunięcie elementu
+przez \texttt{vector::erase} przesuwa późniejsze elementy.
+Dlatego wszystkie indeksy większe od usuniętej pozycji
+są zmniejszane o jeden.
+
+Udane usunięcie ma złożoność czasową $O(n)$ ze względu
+na przesuwanie elementów i poprawianie indeksów.
+Przy braku wartości wyszukiwanie zajmuje $O(h)$,
+gdzie $h$ oznacza wysokość drzewa.
+Dodatkowa pamięć wynosi $O(1)$.
+
+\section{Usuwanie całego drzewa}
+
+Metoda \texttt{removeTree()} wywołuje \texttt{tree.clear()}
+oraz ustawia \texttt{rootIndex} na \texttt{-1}.
+Po jej wykonaniu drzewo jest puste i gotowe
+do ponownego dodawania elementów.
+
+Metodę można wywoływać wielokrotnie.
+Wektor zachowuje pojemność do ponownego wykorzystania.
+Złożoność czasowa operacji wynosi $O(n)$,
+a dodatkowa pamięć $O(1)$.
+
+\section{Przykładowe sprawdzenie}
+
+Program w funkcji \texttt{main} dodaje wartości
+1, 2, 3, 8 oraz 5. Następnie usuwa wartość 3,
+czyści całe drzewo i ponownie dodaje wartość 42.
+Przykład sprawdza usunięcie węzła z jednym dzieckiem
+oraz ponowne wykorzystanie wyczyszczonego obiektu.
+
+Metoda \texttt{show()} wypisuje zawartość wektora.
+Nie realizuje przejść preorder, inorder ani postorder.
+
+\end{document}

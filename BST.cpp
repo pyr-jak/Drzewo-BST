@@ -35,10 +35,71 @@ void BST::show() {
 
 void BST::removeNode(int value)
 {
+    int currentIndex = rootIndex;
+    int parentIndex = -1;
 
+    while (currentIndex != -1 && tree[currentIndex].value != value) {
+        parentIndex = currentIndex;
+
+        if (value < tree[currentIndex].value) {
+            currentIndex = tree[currentIndex].left;
+        } else {
+            currentIndex = tree[currentIndex].right;
+        }
+    }
+
+    if (currentIndex == -1) {
+        return;
+    }
+
+    if (tree[currentIndex].left != -1 &&
+        tree[currentIndex].right != -1) {
+
+        int successorParent = currentIndex;
+        int successorIndex = tree[currentIndex].right;
+
+        while (tree[successorIndex].left != -1) {
+            successorParent = successorIndex;
+            successorIndex = tree[successorIndex].left;
+        }
+
+        tree[currentIndex].value = tree[successorIndex].value;
+
+        parentIndex = successorParent;
+        currentIndex = successorIndex;
+    }
+
+    const int childIndex = tree[currentIndex].left != -1
+        ? tree[currentIndex].left
+        : tree[currentIndex].right;
+
+    if (parentIndex == -1) {
+        rootIndex = childIndex;
+    } else if (tree[parentIndex].left == currentIndex) {
+        tree[parentIndex].left = childIndex;
+    } else {
+        tree[parentIndex].right = childIndex;
+    }
+
+    tree.erase(tree.begin() + currentIndex);
+
+    if (rootIndex > currentIndex) {
+        --rootIndex;
+    }
+
+    for (Node& node : tree) {
+        if (node.left > currentIndex) {
+            --node.left;
+        }
+
+        if (node.right > currentIndex) {
+            --node.right;
+        }
+    }
 }
 
 void BST::removeTree()
 {
-
+    tree.clear();
+    rootIndex = -1;
 }
