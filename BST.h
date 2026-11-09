@@ -7,6 +7,7 @@
 #define BST_H
 
 #include <vector>
+#include <string>
 
 /**
  * @brief Wezel drzewa przechowywanego w kontenerze STL.
@@ -52,6 +53,8 @@ private:
 public:
     /** @brief Tworzy puste drzewo. */
     BST();
+
+    bool saveToTextFile(const std::string& fileName) const;
 
     /**
      * @brief Dodaje wartosc, jezeli jeszcze nie wystepuje.

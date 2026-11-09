@@ -1,5 +1,6 @@
 #include "BST.h"
 #include <iostream>
+#include <fstream>
 
 BST::BST() {
     rootIndex = -1;
@@ -106,6 +107,39 @@ void BST::removeTree()
 {
     tree.clear();
     rootIndex = -1;
+}
+bool BST::saveToTextFile(const std::string& fileName) const
+{
+    std::ofstream file(fileName);
+    if (!file) {
+        return false;
+    }
+
+    std::vector<int> pendingIndices;
+    if (rootIndex != -1) {
+        pendingIndices.push_back(rootIndex);
+    }
+
+    while (!pendingIndices.empty()) {
+        const int currentIndex = pendingIndices.back();
+        pendingIndices.pop_back();
+
+        const Node& node = tree[currentIndex];
+        if (!(file << node.value << '\n')) {
+            return false;
+        }
+
+        // Odkładamy prawe dziecko jako pierwsze, żeby lewe przetworzyć wcześniej.
+        if (node.right != -1) {
+            pendingIndices.push_back(node.right);
+        }
+        if (node.left != -1) {
+            pendingIndices.push_back(node.left);
+        }
+    }
+
+    file.close();
+    return file.good();
 }
 
 void BST::preorderHelper(int currentIndex) {

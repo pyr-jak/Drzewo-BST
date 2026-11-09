@@ -51,6 +51,13 @@ int main()
 
     bst.removeNode(3);
 
+    if (bst.saveToTextFile("drzewo.txt")) {
+        std::cout << "Zapisano drzewo do pliku drzewo.txt.\n";
+    } else {
+        std::cerr << "Nie udalo sie zapisac drzewa do pliku drzewo.txt.\n";
+    }
+
+    bst.removeTree();
         switch (choice) {
             case 1:
             case 2: {
@@ -80,6 +87,11 @@ int main()
                         break;
                     }
 
+    std::cout << "Po ponownym dodaniu 42: ";
+    bst.show();
+
+    return 0;
+}
                     if (adding) {
                         const bool added = bst.addNode(value);
                         std::cout << (added ? "Dodano: " : "Wartosc juz istnieje: ") << value << '\n';
