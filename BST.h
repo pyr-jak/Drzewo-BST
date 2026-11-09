@@ -84,17 +84,16 @@ public:
      */
     void removeTree();
 
-    /**
-     * @brief Wypisuje wartosci w kolejnosci przechowywania w wektorze.
-     * @note Nie realizuje przejsc preorder, inorder ani postorder.
-     */
-
     bool findElement(int value) const;
 
+    std::vector<int> findPath(int value) const;
+
     /**
      * @brief Wypisuje wartosci w kolejnosci przechowywania w wektorze.
      * @note Nie realizuje przejsc preorder, inorder ani postorder.
      */
+
+
 
     void show();
 
