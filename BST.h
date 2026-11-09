@@ -84,11 +84,25 @@ public:
      */
     void removeTree();
 
+    bool findElement(int value) const;
+
+    /**
+     * @brief Wyszukuje sciezke od korzenia do podanego elementu.
+     * @param value Szukana wartosc.
+     * @return Wartosci od korzenia do szukanego wezla wlacznie.
+     * Dla pustego drzewa lub braku elementu zwraca pusty wektor.
+     * @par Zlozonosc
+     * Czas i dodatkowa pamiec: O(h), gdzie h to wysokosc drzewa.
+     */
+    std::vector<int> findPath(int value) const;
+
     /**
      * @brief Wypisuje wartosci w kolejnosci przechowywania w wektorze.
      * @note Nie realizuje przejsc preorder, inorder ani postorder.
      */
+
     void show();
+
 };
 
 #endif
