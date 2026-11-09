@@ -45,6 +45,10 @@ private:
      */
     int insert(int currentIndex, int value);
 
+    void preorderHelper(int currentIndex);
+    void inorderHelper(int currentIndex);
+    void postorderHelper(int currentIndex);
+
 public:
     /** @brief Tworzy puste drzewo. */
     BST();
@@ -52,12 +56,14 @@ public:
     /**
      * @brief Dodaje wartosc, jezeli jeszcze nie wystepuje.
      * @param value Wartosc nowego wezla.
+     * @return true po dodaniu, false jesli wartosc juz istnieje.
      */
-    void addNode(int value);
+    bool addNode(int value);
 
     /**
      * @brief Usuwa wezel o podanej wartosci.
      * @param value Wartosc wezla przeznaczonego do usuniecia.
+     * @return true po usunieciu, false jesli wartosci nie znaleziono.
      *
      * Obsluguje lisc, jedno dziecko, dwoje dzieci oraz korzen.
      * Dla dwojga dzieci wykorzystuje minimum prawego poddrzewa.
@@ -69,7 +75,7 @@ public:
      * Dodatkowa pamiec: O(1).
      * n oznacza liczbe wezlow, a h wysokosc drzewa.
      */
-    void removeNode(int value);
+    bool removeNode(int value);
 
     /**
      * @brief Usuwa wszystkie wezly drzewa.
@@ -84,6 +90,9 @@ public:
      */
     void removeTree();
 
+    void preorder();
+    void inorder();
+    void postorder();
     bool findElement(int value) const;
 
     /**
