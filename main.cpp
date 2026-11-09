@@ -19,6 +19,12 @@ int main()
     std::cout << "Po usunieciu wezla 3: ";
     bst.show();
 
+    if (bst.saveToTextFile("drzewo.txt")) {
+        std::cout << "Zapisano drzewo do pliku drzewo.txt.\n";
+    } else {
+        std::cerr << "Nie udalo sie zapisac drzewa do pliku drzewo.txt.\n";
+    }
+
     bst.removeTree();
 
     std::cout << "Po usunieciu calego drzewa: ";
@@ -28,5 +34,6 @@ int main()
 
     std::cout << "Po ponownym dodaniu 42: ";
     bst.show();
+
     return 0;
 }
