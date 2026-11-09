@@ -45,6 +45,10 @@ private:
      */
     int insert(int currentIndex, int value);
 
+    void preorderHelper(int currentIndex);
+    void inorderHelper(int currentIndex);
+    void postorderHelper(int currentIndex);
+
 public:
     /** @brief Tworzy puste drzewo. */
     BST();
@@ -83,6 +87,10 @@ public:
      * Czas: O(n). Dodatkowa pamiec: O(1).
      */
     void removeTree();
+
+    void preorder();
+    void inorder();
+    void postorder();
 
     /**
      * @brief Wypisuje wartosci w kolejnosci przechowywania w wektorze.

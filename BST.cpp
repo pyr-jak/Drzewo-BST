@@ -103,3 +103,48 @@ void BST::removeTree()
     tree.clear();
     rootIndex = -1;
 }
+
+void BST::preorderHelper(int currentIndex) {
+    if (currentIndex == -1) {
+        return;
+    }
+    std::cout << tree[currentIndex].value << " ";
+    preorderHelper(tree[currentIndex].left);
+    preorderHelper(tree[currentIndex].right);
+}
+
+void BST::preorder() {
+    std::cout << "Preorder: ";
+    preorderHelper(rootIndex);
+    std::cout << std::endl;
+}
+
+void BST::inorderHelper(int currentIndex) {
+    if (currentIndex == -1) {
+        return;
+    }
+    inorderHelper(tree[currentIndex].left);
+    std::cout << tree[currentIndex].value << " ";
+    inorderHelper(tree[currentIndex].right);
+}
+
+void BST::inorder() {
+    std::cout << "Inorder: ";
+    inorderHelper(rootIndex);
+    std::cout << std::endl;
+}
+
+void BST::postorderHelper(int currentIndex) {
+    if (currentIndex == -1) {
+        return;
+    }
+    postorderHelper(tree[currentIndex].left);
+    postorderHelper(tree[currentIndex].right);
+    std::cout << tree[currentIndex].value << " ";
+}
+
+void BST::postorder() {
+    std::cout << "Postorder: ";
+    postorderHelper(rootIndex);
+    std::cout << std::endl;
+}
