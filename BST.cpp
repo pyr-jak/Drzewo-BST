@@ -103,3 +103,38 @@ void BST::removeTree()
     tree.clear();
     rootIndex = -1;
 }
+
+bool BST::findElement(int value) const {
+    int currentIndex = rootIndex;
+
+    while (currentIndex != -1) {
+        if (value == tree[currentIndex].value) {
+            return true;
+        }
+
+        if (value < tree[currentIndex].value) {
+            currentIndex = tree[currentIndex].left;
+        } else {
+            currentIndex = tree[currentIndex].right;
+        }
+    }
+
+    return false;
+}
+std::vector<int> BST::findPath(int value) const {
+    std::vector<int> path;
+    int currentIndex = rootIndex;
+
+    while (currentIndex != -1) {
+        const Node& node = tree[currentIndex];
+        path.push_back(node.value);
+
+        if (value == node.value) {
+            return path;
+        }
+
+        currentIndex = value < node.value ? node.left : node.right;
+    }
+
+    return {};
+}
