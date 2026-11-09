@@ -1,46 +1,77 @@
 #include "BST.h"
 #include <iostream>
+#include <sstream>
+#include <string>
 
 int main()
 {
     BST bst;
-    int choice;
-    int value;
-
-    bst.addNode(5);
-    bst.addNode(3);
-    bst.addNode(7);
-    bst.addNode(1);
-    bst.addNode(4);
-    bst.addNode(6);
-    bst.addNode(8);
+    const char* invalidInput = "Nieprawidlowa liczba calkowita. Sprobuj ponownie.\n";
 
     while (true) {
         std::cout << "\n--- MENU DRZEWA BST ---\n";
-        std::cout << "1. Dodaj element\n";
-        std::cout << "2. Usun element\n";
+        std::cout << "1. Dodaj elementy (wpisuj wartosci, 0 aby wrocic)\n";
+        std::cout << "2. Usun elementy (wpisuj wartosci, 0 aby wrocic)\n";
         std::cout << "3. Usun cale drzewo\n";
         std::cout << "4. Wyswietl drzewo - Preorder\n";
         std::cout << "5. Wyswietl drzewo - Inorder\n";
         std::cout << "6. Wyswietl drzewo - Postorder\n";
         std::cout << "7. Wyjscie z programu\n";
-        std::cout << "Wybierz opcje: ";
 
-        std::cin >> choice;
+        int choice;
+        std::string token;
+        while (true) {
+            std::cout << "Wybierz opcje: ";
+            if (!(std::cin >> token)) {
+                return 0;
+            }
+
+            std::istringstream input(token);
+            if (input >> choice && input.eof()) {
+                break;
+            }
+            std::cout << invalidInput;
+        }
 
         switch (choice) {
             case 1:
-                std::cout << "Podaj wartosc do dodania: ";
-                std::cin >> value;
-                bst.addNode(value);
-                std::cout << "Element zostal dodany.\n";
+            case 2: {
+                const bool adding = choice == 1;
+                const char* prompt;
+                if (adding) {
+                    std::cout << "\n--- Tryb dodawania (wpisz 0, aby wrocic do menu) ---\n";
+                    prompt = "Podaj wartosc do dodania: ";
+                } else {
+                    std::cout << "\n--- Tryb usuwania (wpisz 0, aby wrocic do menu) ---\n";
+                    prompt = "Podaj wartosc do usuniecia: ";
+                }
+
+                while (true) {
+                    std::cout << prompt;
+                    if (!(std::cin >> token)) {
+                        return 0;
+                    }
+
+                    int value;
+                    std::istringstream input(token);
+                    if (!(input >> value) || !input.eof()) {
+                        std::cout << invalidInput;
+                        continue;
+                    }
+                    if (value == 0) {
+                        break;
+                    }
+
+                    if (adding) {
+                        const bool added = bst.addNode(value);
+                        std::cout << (added ? "Dodano: " : "Wartosc juz istnieje: ") << value << '\n';
+                    } else {
+                        const bool removed = bst.removeNode(value);
+                        std::cout << (removed ? "Usunieto: " : "Nie znaleziono wartosci: ") << value << '\n';
+                    }
+                }
                 break;
-            case 2:
-                std::cout << "Podaj wartosc do usuniecia: ";
-                std::cin >> value;
-                bst.removeNode(value);
-                std::cout << "Procedura usuniecia wykonana.\n";
-                break;
+            }
             case 3:
                 bst.removeTree();
                 std::cout << "Cale drzewo zostalo usuniete.\n";
@@ -62,6 +93,4 @@ int main()
                 break;
         }
     }
-
-    return 0;
 }

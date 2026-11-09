@@ -22,8 +22,10 @@ int BST::insert(int currentIndex, int value) {
     return currentIndex;
 }
 
-void BST::addNode(int value) {
+bool BST::addNode(int value) {
+    const auto sizeBefore = tree.size();
     rootIndex = insert(rootIndex, value);
+    return tree.size() != sizeBefore;
 }
 
 void BST::show() {
@@ -33,7 +35,7 @@ void BST::show() {
     std::cout << std::endl;
 }
 
-void BST::removeNode(int value)
+bool BST::removeNode(int value)
 {
     int currentIndex = rootIndex;
     int parentIndex = -1;
@@ -49,7 +51,7 @@ void BST::removeNode(int value)
     }
 
     if (currentIndex == -1) {
-        return;
+        return false;
     }
 
     if (tree[currentIndex].left != -1 &&
@@ -96,6 +98,8 @@ void BST::removeNode(int value)
             --node.right;
         }
     }
+
+    return true;
 }
 
 void BST::removeTree()
