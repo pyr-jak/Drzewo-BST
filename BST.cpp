@@ -23,8 +23,10 @@ int BST::insert(int currentIndex, int value) {
     return currentIndex;
 }
 
-void BST::addNode(int value) {
+bool BST::addNode(int value) {
+    const auto sizeBefore = tree.size();
     rootIndex = insert(rootIndex, value);
+    return tree.size() != sizeBefore;
 }
 
 void BST::show() {
@@ -34,7 +36,7 @@ void BST::show() {
     std::cout << std::endl;
 }
 
-void BST::removeNode(int value)
+bool BST::removeNode(int value)
 {
     int currentIndex = rootIndex;
     int parentIndex = -1;
@@ -50,7 +52,7 @@ void BST::removeNode(int value)
     }
 
     if (currentIndex == -1) {
-        return;
+        return false;
     }
 
     if (tree[currentIndex].left != -1 &&
@@ -97,6 +99,8 @@ void BST::removeNode(int value)
             --node.right;
         }
     }
+
+    return true;
 }
 
 void BST::removeTree()
@@ -136,4 +140,83 @@ bool BST::saveToTextFile(const std::string& fileName) const
 
     file.close();
     return file.good();
+}
+
+void BST::preorderHelper(int currentIndex) {
+    if (currentIndex == -1) {
+        return;
+    }
+    std::cout << tree[currentIndex].value << " ";
+    preorderHelper(tree[currentIndex].left);
+    preorderHelper(tree[currentIndex].right);
+}
+
+void BST::preorder() {
+    std::cout << "Preorder: ";
+    preorderHelper(rootIndex);
+    std::cout << std::endl;
+}
+
+void BST::inorderHelper(int currentIndex) {
+    if (currentIndex == -1) {
+        return;
+    }
+    inorderHelper(tree[currentIndex].left);
+    std::cout << tree[currentIndex].value << " ";
+    inorderHelper(tree[currentIndex].right);
+}
+
+void BST::inorder() {
+    std::cout << "Inorder: ";
+    inorderHelper(rootIndex);
+    std::cout << std::endl;
+}
+
+void BST::postorderHelper(int currentIndex) {
+    if (currentIndex == -1) {
+        return;
+    }
+    postorderHelper(tree[currentIndex].left);
+    postorderHelper(tree[currentIndex].right);
+    std::cout << tree[currentIndex].value << " ";
+}
+
+void BST::postorder() {
+    std::cout << "Postorder: ";
+    postorderHelper(rootIndex);
+    std::cout << std::endl;
+}
+bool BST::findElement(int value) const {
+    int currentIndex = rootIndex;
+
+    while (currentIndex != -1) {
+        if (value == tree[currentIndex].value) {
+            return true;
+        }
+
+        if (value < tree[currentIndex].value) {
+            currentIndex = tree[currentIndex].left;
+        } else {
+            currentIndex = tree[currentIndex].right;
+        }
+    }
+
+    return false;
+}
+std::vector<int> BST::findPath(int value) const {
+    std::vector<int> path;
+    int currentIndex = rootIndex;
+
+    while (currentIndex != -1) {
+        const Node& node = tree[currentIndex];
+        path.push_back(node.value);
+
+        if (value == node.value) {
+            return path;
+        }
+
+        currentIndex = value < node.value ? node.left : node.right;
+    }
+
+    return {};
 }
