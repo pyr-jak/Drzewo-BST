@@ -129,7 +129,6 @@ bool BST::saveToTextFile(const std::string& fileName) const
             return false;
         }
 
-        // Odkładamy prawe dziecko jako pierwsze, żeby lewe przetworzyć wcześniej.
         if (node.right != -1) {
             pendingIndices.push_back(node.right);
         }

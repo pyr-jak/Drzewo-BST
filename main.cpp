@@ -6,20 +6,22 @@
 int main()
 {
     BST bst;
+    std::string token;
     const char* invalidInput = "Nieprawidlowa liczba calkowita. Sprobuj ponownie.\n";
 
     while (true) {
-        std::cout << "\n--- MENU DRZEWA BST ---\n";
-        std::cout << "1. Dodaj elementy (wpisuj wartosci, 0 aby wrocic)\n";
-        std::cout << "2. Usun elementy (wpisuj wartosci, 0 aby wrocic)\n";
-        std::cout << "3. Usun cale drzewo\n";
-        std::cout << "4. Wyswietl drzewo - Preorder\n";
-        std::cout << "5. Wyswietl drzewo - Inorder\n";
-        std::cout << "6. Wyswietl drzewo - Postorder\n";
-        std::cout << "7. Wyjscie z programu\n";
+        std::cout << "\n--- MENU DRZEWA BST ---\n"
+                     "1. Dodaj elementy (wpisuj wartosci, 0 aby wrocic)\n"
+                     "2. Usun elementy (wpisuj wartosci, 0 aby wrocic)\n"
+                     "3. Usun cale drzewo\n"
+                     "4. Wyswietl drzewo - Preorder\n"
+                     "5. Wyswietl drzewo - Inorder\n"
+                     "6. Wyswietl drzewo - Postorder\n"
+                     "7. Wyjscie z programu\n"
+                     "8. Wyszukaj sciezke do elementu\n"
+                     "9. Zapisz drzewo do pliku drzewo.txt\n";
 
         int choice;
-        std::string token;
         while (true) {
             std::cout << "Wybierz opcje: ";
             if (!(std::cin >> token)) {
@@ -32,32 +34,7 @@ int main()
             }
             std::cout << invalidInput;
         }
-    std::cout << "Podaj wartość, aby wyszukać ścieżkę: ";
-    int value;
-    if (std::cin >> value) {
-        const std::vector<int> path = bst.findPath(value);
-        if (path.empty()) {
-            std::cout << "Nie znaleziono elementu " << value << ".\n";
-        } else {
-            std::cout << "Ścieżka od korzenia: " << path.front();
-            for (std::size_t i = 1; i < path.size(); ++i) {
-                std::cout << " -> " << path[i];
-            }
-            std::cout << '\n';
-        }
-    } else {
-        std::cout << "Nie podano poprawnej liczby całkowitej.\n";
-    }
 
-    bst.removeNode(3);
-
-    if (bst.saveToTextFile("drzewo.txt")) {
-        std::cout << "Zapisano drzewo do pliku drzewo.txt.\n";
-    } else {
-        std::cerr << "Nie udalo sie zapisac drzewa do pliku drzewo.txt.\n";
-    }
-
-    bst.removeTree();
         switch (choice) {
             case 1:
             case 2: {
@@ -87,11 +64,6 @@ int main()
                         break;
                     }
 
-    std::cout << "Po ponownym dodaniu 42: ";
-    bst.show();
-
-    return 0;
-}
                     if (adding) {
                         const bool added = bst.addNode(value);
                         std::cout << (added ? "Dodano: " : "Wartosc juz istnieje: ") << value << '\n';
@@ -118,6 +90,40 @@ int main()
             case 7:
                 std::cout << "Zamykanie programu...\n";
                 return 0;
+            case 8: {
+                int value;
+                while (true) {
+                    std::cout << "Podaj wartosc, aby wyszukac sciezke: ";
+                    if (!(std::cin >> token)) {
+                        return 0;
+                    }
+
+                    std::istringstream input(token);
+                    if (input >> value && input.eof()) {
+                        break;
+                    }
+                    std::cout << invalidInput;
+                }
+
+                const auto path = bst.findPath(value);
+                if (path.empty()) {
+                    std::cout << "Nie znaleziono elementu " << value << ".\n";
+                } else {
+                    std::cout << "Sciezka od korzenia: " << path.front();
+                    for (std::size_t i = 1; i < path.size(); ++i) {
+                        std::cout << " -> " << path[i];
+                    }
+                    std::cout << '\n';
+                }
+                break;
+            }
+            case 9:
+                if (bst.saveToTextFile("drzewo.txt")) {
+                    std::cout << "Zapisano drzewo do pliku drzewo.txt.\n";
+                } else {
+                    std::cerr << "Nie udalo sie zapisac drzewa do pliku drzewo.txt.\n";
+                }
+                break;
             default:
                 std::cout << "Nieprawidlowa opcja. Sprobuj ponownie.\n";
                 break;
