@@ -1,9 +1,0 @@
-PROJECT_NAME      = "Drzewo BST"
-OUTPUT_DIRECTORY  = dokumentacja_doxygen
-OUTPUT_LANGUAGE   = Polish
-INPUT             = BST.h BST.cpp main.cpp
-EXTRACT_ALL       = YES
-EXTRACT_PRIVATE   = YES
-GENERATE_HTML     = YES
-GENERATE_LATEX    = YES
-HAVE_DOT          = NO
