@@ -1,0 +1,64 @@
+% Pakiety potrzebne do bieżącej dokumentacji.
+\usepackage{cmap}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\IfFileExists{polish.ldf}{%
+  \usepackage[polish]{babel}%
+}{%
+  \usepackage{babel}%
+  \babelprovide[main,import]{polish}%
+}
+\usepackage{amsmath,amssymb}
+\usepackage{microtype}
+\usepackage[final]{graphicx}
+\usepackage[a4paper,left=3.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{strona_tytulowa}
+\usepackage[sf,bf]{titlesec}
+\usepackage{tocloft}
+\usepackage{array,tabularx}
+\usepackage{float}
+\usepackage[section]{placeins}
+\usepackage{needspace}
+\usepackage{listings}
+\usepackage[format=hang,labelsep=period,labelfont={bf,small},textfont=small]{caption}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.multipart}
+\usepackage{fancyhdr}
+\usepackage[
+  unicode=true,colorlinks=true,urlcolor=blue,linkcolor=black,citecolor=black,
+  bookmarksopen=true,bookmarksnumbered=true,pdfstartview=FitH
+]{hyperref}
+
+\definecolor{codegreen}{rgb}{0,0.45,0}
+\definecolor{codegray}{rgb}{0.45,0.45,0.45}
+\definecolor{codepurple}{rgb}{0.58,0,0.72}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+  language=C++,
+  backgroundcolor=\color{backcolour},
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{blue},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize\bezligaturkodu,
+  breaklines=true,breakatwhitespace=false,
+  captionpos=b,keepspaces=true,numbers=left,numbersep=6pt,
+  showspaces=false,showstringspaces=false,showtabs=false,tabsize=4,
+  columns=fullflexible,
+  xleftmargin=1.5em,framexleftmargin=0.4em,
+  aboveskip=7pt,belowskip=5pt,
+  literate=
+    {ą}{{\k{a}}}1 {ć}{{\'c}}1 {ę}{{\k{e}}}1 {ł}{{\l}}1
+    {ń}{{\'n}}1 {ó}{{\'o}}1 {ś}{{\'s}}1 {ź}{{\'z}}1 {ż}{{\.z}}1
+    {Ą}{{\k{A}}}1 {Ć}{{\'C}}1 {Ę}{{\k{E}}}1 {Ł}{{\L}}1
+    {Ń}{{\'N}}1 {Ó}{{\'O}}1 {Ś}{{\'S}}1 {Ź}{{\'Z}}1 {Ż}{{\.Z}}1
+}
+\lstdefinestyle{terminal}{
+  style=mystyle,language={},numbers=none,frame=single,
+  backgroundcolor=\color{white},xleftmargin=0pt,framexleftmargin=0pt,
+  basicstyle=\ttfamily\footnotesize\bezligaturkodu
+}
+\lstdefinestyle{konfiguracja}{style=mystyle,language={}}
+\lstset{style=mystyle}

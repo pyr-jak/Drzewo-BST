@@ -1,0 +1,38 @@
+\clearpage
+\section{Wnioski}
+
+Indeksowa reprezentacja drzewa pozwoliła przechowywać węzły
+w jednym wektorze i oddzielić ich rozmieszczenie od logicznych
+połączeń. Konsekwencją tego wyboru jest aktualizacja indeksów
+po usunięciu pozycji. Nawet gdy węzeł można znaleźć szybko,
+udane usunięcie wymaga przejścia po pozostałych elementach
+wektora i ma koszt $O(n)$.
+
+Wyszukiwanie wartości i ścieżki oraz porównania podczas
+wstawiania zależą od wysokości drzewa $h$. Kolejność danych
+ma więc znaczenie. Jeżeli liczby są podawane rosnąco, każdy
+następny węzeł staje się prawym dzieckiem poprzedniego.
+Wówczas $h$ rośnie liniowo, a budowanie drzewa przez kolejne
+wstawienia może wymagać $O(n^2)$ czasu. Dotyczy to również
+odtwarzania takiego drzewa z pliku binarnego. Rekurencyjne
+wstawianie, inorder, postorder i rysowanie korzystają
+ze stosu wywołań o głębokości rzędu $h$.
+
+Każde z trzech przejść odwiedza wszystkie węzły i ma koszt
+czasowy $O(n)$, bez uwzględnienia rysunku konsolowego.
+Implementacja preorder gromadzi cały wynik w wektorze
+i wykorzystuje na ten cel $O(n)$ dodatkowej pamięci.
+
+Próby z podrozdziału~\ref{sec:testy} pokazują, że kolejność
+przejścia można dobrać do celu. Inorder daje uporządkowaną
+listę kluczy, a preorder wystarcza do zapisania i odtworzenia
+kształtu drzewa bez przechowywania indeksów. W obu trybach
+odczytu wynik trafia do bieżącego drzewa po sprawdzeniu
+danych. Dzięki temu błędny plik nie pozostawia częściowo
+wczytanego drzewa.
+
+Naturalnym rozszerzeniem przy wymianie danych między różnymi
+platformami byłby format binarny z określoną kolejnością
+bajtów i stałą szerokością klucza. Przy pracy z dużymi,
+uporządkowanymi zbiorami danych istotnym kierunkiem rozwoju
+byłoby ograniczenie wysokości drzewa i głębokości rekurencji.

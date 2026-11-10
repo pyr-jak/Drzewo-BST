@@ -1,0 +1,110 @@
+\clearpage
+\section{Projektowanie}
+
+\subsection{Podział odpowiedzialności}
+
+Program składa się z interfejsu konsolowego, klasy reprezentującej
+drzewo oraz modułu operacji plikowych. Tabela~\ref{tab:moduly}
+pokazuje, za co odpowiada każda część. Deklaracje struktur i metod
+umieszczono w plikach nagłówkowych. Ich szczegółowy wykaz zawiera
+również dokumentacja wygenerowana przez Doxygen~\cite{doxygen-bst}.
+
+\begin{tabela}{Podział programu na moduły}
+              {Podział programu na moduły}
+              {\label{tab:moduly}}
+\small
+\begin{tabularx}{\linewidth}{|L{4.2cm}|Y|}
+\hline
+\textbf{Pliki} & \textbf{Odpowiedzialność}\\ \hline
+\kod{main.cpp} & Wyświetla menu, sprawdza dane wejściowe i przekazuje
+                 operacje do \kod{BST} lub \kod{BSTFile}.\\ \hline
+\kod{BST.h}, \kod{BST.cpp} & Definiują węzeł \kod{Node} i klasę
+  \kod{BST}. Zarządzają węzłami, wyszukiwaniem, przejściami,
+  rysunkiem drzewa i jego zapisem tekstowym.\\ \hline
+\kod{BSTFile.h}, \kod{BSTFile.cpp} & Zawierają metody statyczne
+  do zapisu i odczytu binarnego oraz do importu tekstowego.
+  Korzystają z metod publicznych klasy \kod{BST}.\\ \hline
+\kod{CMakeLists.txt} & Definiuje budowanie programu
+  \kod{Drzewo_BST} z trzech plików \kod{.cpp}.\\ \hline
+\end{tabularx}
+\end{tabela}
+
+\subsection{Warunki poprawności drzewa}
+
+Wektor \kod{tree} zawiera wszystkie węzły należące do drzewa.
+W drzewie niepustym \kod{rootIndex} wskazuje prawidłową pozycję
+w wektorze. Każdy pozostały węzeł jest osiągalny z korzenia przez
+jedno połączenie od rodzica. Pola dzieci przyjmują wartość $-1$
+albo indeks istniejącego węzła. Przez całą ścieżkę obowiązuje
+porządek BST opisany w rozdziale~\ref{sec:analiza}.
+
+Indeks jest szczegółem reprezentacji i może zmienić się po
+usunięciu pozycji z wektora. Z tego powodu metody publiczne
+przyjmują klucze typu \kod{int}, a \kod{findPath()} i
+\kod{preorderValues()} zwracają wartości węzłów. Program główny
+może więc używać tych metod bez dostępu do wektora i indeksów.
+
+\Needspace{11\baselineskip}
+\subsection{Menu konsolowe}
+\label{sec:menu}
+
+Opcje menu zestawiono w tabeli~\ref{tab:menu}. W trybach dodawania
+i usuwania można podać wiele wartości rozdzielonych białymi znakami.
+Wpisanie małej litery \kod{q} przywraca menu. Wyszukiwanie ścieżki
+przyjmuje jedną wartość i po wyświetleniu wyniku wraca do menu.
+
+\begin{tabela}{Opcje menu programu}{Opcje menu programu}{\label{tab:menu}}
+\small
+\begin{tabularx}{\linewidth}{|c|Y|L{5.1cm}|}
+\hline
+\textbf{Opcja} & \textbf{Działanie} & \textbf{Metoda}\\ \hline
+1 & Dodawanie elementów & \kod{BST::addNode()}\\ \hline
+2 & Usuwanie elementów & \kod{BST::removeNode()}\\ \hline
+3 & Usuwanie całego drzewa & \kod{BST::removeTree()}\\ \hline
+4, 5, 6 & Przejścia preorder, inorder i postorder.
+Każda opcja wypisuje również rysunek drzewa. &
+\kod{preorder()}, \kod{inorder()}, \kod{postorder()}, \kod{printTree()}\\ \hline
+7 & Wyszukanie ścieżki od korzenia & \kod{BST::findPath()}\\ \hline
+8 & Zapis do \kod{drzewo.txt} & \kod{BST::saveToTextFile()}\\ \hline
+9 & Zapis do \kod{drzewo.bin} & \kod{BSTFile::saveBinary()}\\ \hline
+10 & Odtworzenie drzewa z \kod{drzewo.bin} & \kod{BSTFile::loadBinary()}\\ \hline
+11 & Dodanie liczb ze wskazanego pliku tekstowego & \kod{BSTFile::loadText()}\\ \hline
+12 & Zakończenie programu & Powrót z \kod{main()}\\ \hline
+\end{tabularx}
+\end{tabela}
+
+Numery opcji i wartości są odczytywane jako pojedyncze tokeny.
+Program sprawdza, czy cały token można odczytać jako liczbę typu
+\kod{int}. Wpisy takie jak \kod{3x}, \kod{3.5} i liczby spoza
+zakresu typu są odrzucane. Liczba całkowita spoza zakresu opcji
+1--12 powoduje ponowne wyświetlenie menu z komunikatem o błędnej
+opcji. Zakończenie strumienia wejściowego kończy pracę programu.
+
+\Needspace{9\baselineskip}
+\subsection{Dane zapisywane w plikach}
+\label{sec:formaty}
+
+Zapis tekstowy tworzy plik \kod{drzewo.txt} z jedną liczbą w każdym
+wierszu. Zapis binarny tworzy plik \kod{drzewo.bin}, który zaczyna się
+od licznika typu \kod{std::uint64_t}, po którym występują kolejne
+wartości typu \kod{int}. W obu przypadkach wartości są pobierane
+w kolejności preorder. Plik binarny zapisany przez program zawiera
+więc $8 + n \cdot \texttt{sizeof(int)}$ bajtów dla $n$ węzłów.
+Program zapisuje typy w ich reprezentacji maszynowej. Przy wymianie
+plików między platformami wymagane są zgodne rozmiary i kolejność
+bajtów zapisywanych typów.
+
+Wstawianie wartości w kolejności preorder do pustego drzewa
+odtwarza jego kształt. Pierwsza wartość staje się korzeniem.
+Przed wartościami każdego poddrzewa występuje jego własny korzeń,
+więc ta sama zasada działa na kolejnych poziomach. Węzły w wektorze
+mogą po odczycie mieć inne indeksy, ponieważ wynikowy wektor jest
+budowany w kolejności wstawiania.
+
+Odczyt binarny zastępuje bieżące drzewo wynikiem po sprawdzeniu
+całego pliku. Import tekstowy dopisuje unikatowe liczby do
+bieżącego drzewa. W opcji~11 należy podać ścieżkę w jednym
+wierszu. Ścieżka może zawierać spacje i jest podawana bez
+cudzysłowów. Ścieżki względne są rozwiązywane względem katalogu
+roboczego programu. Jeśli celem jest odtworzenie drzewa z pliku
+\kod{drzewo.txt}, należy najpierw je opróżnić opcją~3.

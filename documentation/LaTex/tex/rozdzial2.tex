@@ -1,0 +1,125 @@
+\clearpage
+\section{Analiza problemu}
+\label{sec:analiza}
+
+\subsection{Zastosowanie i reprezentacja danych}
+
+Drzewo BST służy do porządkowania danych według klucza.
+Porównanie z wartością bieżącego węzła pozwala wybrać jedno
+z poddrzew, zamiast sprawdzać wszystkie elementy.
+Struktura ta może być wykorzystywana do przechowywania zbiorów
+unikatowych wartości i budowy prostych indeksów.
+
+W projekcie węzeł \kod{Node} zawiera wartość \kod{value}
+oraz pola \kod{left} i \kod{right}. Pola dzieci są indeksami
+w wektorze \kod{tree}; wartość \kod{-1} oznacza brak dziecka.
+Indeks korzenia znajduje się w \kod{rootIndex}.
+Dla pustego drzewa również wynosi on \kod{-1}.
+
+Rozmieszczenie węzłów w wektorze jest oddzielone od ich połączeń.
+Element może leżeć pod dowolnym poprawnym indeksem, o ile pola
+dzieci prowadzą do właściwych poddrzew. Sama kolejność wektora
+nie musi być posortowana.
+
+\subsection{Sposób działania algorytmu}
+
+Dodawanie rozpoczyna się od korzenia. Wartość mniejsza jest kierowana
+do lewego poddrzewa, a większa do prawego. Po dojściu do pustego
+połączenia nowy węzeł zostaje dopisany na końcu wektora,
+a jego indeks zapisany jako połączenie od rodzica.
+Jeżeli wartość już występuje, operacja nie dodaje duplikatu.
+
+Usuwanie rozpoczyna się od wyszukania wartości i zapamiętania
+rodzica znalezionego węzła. Gdy wartości nie ma, drzewo pozostaje
+bez zmian. Dla znalezionego elementu rozpatrywane są trzy przypadki:
+\begin{itemize}
+  \item liść zostaje odłączony od rodzica;
+  \item węzeł z jednym dzieckiem zostaje zastąpiony połączeniem
+        do tego dziecka;
+  \item węzeł z dwojgiem dzieci otrzymuje wartość minimum prawego
+        poddrzewa, po czym usuwany jest węzeł tego następnika.
+\end{itemize}
+
+Usunięcie pozycji wektora przesuwa późniejsze elementy.
+Program zmniejsza więc o jeden wszystkie indeksy większe od
+usuniętej pozycji, uwzględniając również indeks korzenia.
+Metoda \kod{removeTree()} czyści cały wektor i ustawia
+\kod{rootIndex} na \kod{-1}. Obiekt może następnie przyjmować
+kolejne wartości.
+
+Dla wysokości drzewa $h$ przejście po jednej ścieżce ma koszt $O(h)$.
+Dodawanie, wyszukiwanie wartości i wyszukiwanie ścieżki zaczynają się
+od korzenia i korzystają z tej reguły. Drzewo nie jest równoważone,
+więc przy niekorzystnej kolejności danych
+wysokość może rosnąć liniowo z liczbą węzłów $n$.
+Skuteczne usunięcie ma koszt $O(n)$ ze względu na przesuwanie
+elementów i poprawianie indeksów. Realokacja bufora wektora
+może również nadać pojedynczemu dodaniu koszt $O(n)$.
+
+\subsection{Ręczny przykład działania}
+\label{sec:przyklad-reczny}
+
+Po dodaniu wartości $1,2,3,8,5$ korzeniem jest 1.
+Węzły 2, 3 i 8 tworzą ciąg prawych połączeń, natomiast
+5 jest lewym dzieckiem węzła 8.
+Rysunek~\ref{rys:przyklad-bst} pokazuje tę strukturę
+oraz wynik usunięcia wartości 3. Litery L i P oznaczają
+lewe i prawe dziecko.
+
+\begin{figure}[H]
+\centering
+\input{rys/przyklad_bst.tex}
+\caption{Drzewo przed usunięciem wartości 3 i po jej usunięciu}
+\label{rys:przyklad-bst}
+\end{figure}
+
+Węzeł o wartości 3 ma jedno dziecko: węzeł 8.
+Program łączy więc rodzica, czyli węzeł 2, bezpośrednio z węzłem 8.
+Następnie usuwa pozycję o indeksie 2 z wektora.
+Węzły 8 i 5 przesuwają się pod indeksy 2 i 3,
+dlatego trzeba poprawić prowadzące do nich połączenia.
+
+Tabela~\ref{tab:zmiana-indeksow} przedstawia zawartość wektora
+przed operacją i po korekcie indeksów. Korzeń nadal ma indeks 0.
+Kreski w ostatnim wierszu oznaczają pozycję, której po usunięciu
+nie ma już w kontenerze.
+
+\begin{table}[H]
+\centering
+\caption{Zmiana zawartości wektora po usunięciu wartości 3}
+\label{tab:zmiana-indeksow}
+\small
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+& \multicolumn{3}{c|}{\textbf{Przed usunięciem}}
+& \multicolumn{3}{c|}{\textbf{Po usunięciu}}\\ \hline
+\textbf{Indeks} & \textbf{value} & \textbf{left} & \textbf{right}
+& \textbf{value} & \textbf{left} & \textbf{right}\\ \hline
+0 & 1 & $-1$ & 1 & 1 & $-1$ & 1\\ \hline
+1 & 2 & $-1$ & 2 & 2 & $-1$ & 2\\ \hline
+2 & 3 & $-1$ & 3 & 8 & 3 & $-1$\\ \hline
+3 & 8 & 4 & $-1$ & 5 & $-1$ & $-1$\\ \hline
+4 & 5 & $-1$ & $-1$ & --- & --- & ---\\ \hline
+\end{tabular}
+\end{table}
+
+Po tej operacji metoda \kod{show()} wypisałaby $1,2,8,5$,
+zgodnie z kolejnością w wektorze. Opcja inorder w menu podąża
+za połączeniami i wypisuje wartości w kolejności $1,2,5,8$.
+
+\subsection{Zależności między modułami a kolejność scalania}
+\label{sec:kolejnosc-scalania}
+
+Jeżeli obie gałęzie robocze wprowadzają zależne zmiany, najpierw
+należy scalić do \kod{main} operacje drzewa. Na przykład zapis
+binarny używa metody \kod{preorderValues()}, a menu korzysta
+z \kod{findPath()}. Zmiany w deklaracjach tych metod powinny
+trafić do gałęzi z interfejsem, zanim jej PR zostanie scalony.
+W tym celu włącza się do niej aktualny stan \kod{main}
+zgodnie z procedurą z punktu~\ref{sec:konflikt-scalania}.
+
+Po aktualizacji gałęzi interfejsu sprawdza się kompilację programu
+i uruchamia próby zależnych operacji. Dla \kod{findPath()} można
+porównać ścieżkę do znanego węzła, a dla zapisu binarnego
+zapisać drzewo, opróżnić je i odtworzyć z pliku. Wyniki
+tych prób można dołączyć do PR-a jako podstawę przeglądu.

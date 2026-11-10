@@ -1,0 +1,123 @@
+\clearpage
+\section{Implementacja}
+
+\subsection{Dodawanie i usuwanie węzłów}
+
+Metoda \kod{addNode()} zapamiętuje rozmiar wektora i wywołuje
+rekurencyjną metodę \kod{insert()}. Wzrost rozmiaru oznacza
+dodanie nowego węzła i wynik \kod{true}. Wartość już obecna
+w drzewie kończy operację wynikiem \kod{false}. Po powrocie
+z wywołania rekurencyjnego rodzic jest ponownie odczytywany
+przez indeks. Dzięki temu dodanie elementu pozostaje poprawne
+także po przeniesieniu bufora wektora. Pokazuje to
+listing~\ref{lst:wstawianie}.
+
+\listingpliku[firstline=25,lastline=34,firstnumber=25,
+  caption={Aktualizacja połączenia po wstawieniu do poddrzewa},
+  label={lst:wstawianie}]{kod/BST.cpp}
+
+Metoda \kod{removeNode()} wyszukuje iteracyjnie wartość i zapamiętuje
+indeks rodzica. W przypadku dwojga dzieci szuka następnika, schodząc
+najpierw w prawo, a następnie maksymalnie w lewo. Kopiuje jego
+wartość do usuwanego węzła, a fizycznie usuwa następnika. Następnik
+może mieć prawe dziecko, które przejmuje jego dotychczasowe miejsce.
+W przypadku usuwania korzenia z najwyżej jednym dzieckiem
+aktualizowane jest bezpośrednio pole \kod{rootIndex}.
+
+Metoda usuwa pozycję z wektora dopiero po przełączeniu połączeń.
+Potem zmniejsza wszystkie indeksy większe od usuniętej pozycji.
+Zwraca \kod{true} po usunięciu węzła i \kod{false}, jeśli klucza
+nie znaleziono. Metoda \kod{removeTree()} wywołuje \kod{tree.clear()}
+i ustawia \kod{rootIndex} na $-1$. Wektor zachowuje pojemność do
+ponownego wykorzystania.
+
+\Needspace{7\baselineskip}
+\subsection{Wyszukiwanie, przejścia i rysunek}
+
+Metoda \kod{findElement()} zwraca informację o obecności klucza.
+Używana przez menu metoda \kod{findPath()} dodatkowo zapisuje
+wartości napotkanych węzłów. Znaleziona ścieżka obejmuje korzeń
+i szukany węzeł. Gdy wyszukiwanie dojdzie do indeksu $-1$,
+metoda zwraca pusty wektor. Jeżeli szukanym kluczem jest korzeń,
+wynik zawiera jedną wartość.
+
+\kod{preorderValues()} używa wektora indeksów jako stosu.
+Pobiera węzeł, dopisuje jego wartość do wyniku, a następnie
+odkłada na stos najpierw prawe, potem lewe dziecko. Dzięki
+temu lewe poddrzewo jest odwiedzane wcześniej. Z wyniku tej
+metody korzystają przejście preorder i oba tryby zapisu.
+Inorder odwiedza lewe poddrzewo, węzeł i prawe poddrzewo,
+uzyskując wartości rosnąco. Postorder wypisuje węzeł po obu
+poddrzewach. Te dwa przejścia są rekurencyjne. Metoda
+\kod{show()} jest osobną funkcją klasy i odczytuje wartości
+w fizycznej kolejności wektora.
+
+\kod{printTree()} wywołuje rekurencyjną metodę \kod{drawBranch()},
+która tworzy etykiety z wartości liczbowych, przydziela im
+miejsce w kolejności inorder i buduje wiersze rysunku. Między
+poziomami drzewa umieszcza wiersze z łącznikami. Dla węzła
+z dwojgiem dzieci pozycja środka etykiety jest wyznaczana
+na podstawie pozycji obu dzieci. Dla pustego drzewa
+\kod{printTree()} wypisuje komunikat \kod{Drzewo jest puste.}
+
+\subsection{Sprawdzanie danych podczas odczytu}
+
+\kod{loadBinary()} zaczyna od odczytania licznika, a następnie
+wstawia kolejne wartości do nowego obiektu \kod{BST}. Wykrywa
+brak wymaganych danych, duplikaty i nadmiarowe bajty.
+Dopiero po sprawdzeniu końca pliku przenosi wynik do drzewa
+używanego w menu. Poprawny zapis pustego drzewa zawiera
+sam licznik o wartości zero. Wczytanie takiego pliku
+opróżnia bieżące drzewo.
+
+\kod{loadText()} zaczyna od kopii istniejącego drzewa. Czyta
+tokeny oddzielone białymi znakami i sprawdza, czy każdy mieści
+się w zakresie \kod{int} i składa się w całości z zapisu
+liczby całkowitej. Duplikaty są pomijane przez \kod{addNode()}.
+Pusty plik tekstowy zostaje odczytany poprawnie i nie dodaje
+żadnych wartości. Przy błędzie odczytu albo błędnym tokenie
+bieżące drzewo zachowuje swój stan także wtedy, gdy wcześniej
+przetworzono już część pliku. Metody zapisu zwracają błąd
+przy problemie z otwarciem, zapisem lub zamknięciem pliku.
+Oba zapisy otwierają plik w trybie nadpisywania, więc błąd po
+otwarciu może pozostawić plik częściowy.
+
+\Needspace{12\baselineskip}
+\subsection{Sprawdzenie działania}
+\label{sec:testy}
+
+Kod skompilowano w trybie C++14. Do pustego drzewa wprowadzono
+kolejno liczby 8, 3, 10, 1, 6, 14, 4, 7 i 13. Listing~\ref{lst:przejscia}
+zawiera wiersze z wynikami trzech przejść odczytane z konsoli.
+
+\begin{lstlisting}[style=terminal,caption={Wyniki trzech przejść drzewa},label={lst:przejscia}]
+Preorder: 8 3 1 6 4 7 10 14 13
+Inorder: 1 3 4 6 7 8 10 13 14
+Postorder: 1 4 7 6 3 13 14 10 8
+\end{lstlisting}
+
+Tabela~\ref{tab:proby} zestawia pozostałe próby wykonane z menu.
+Próby importu wykonano z drzewa złożonego z węzła o wartości 8.
+
+\begin{tabela}{Próby wykonane w menu}{Próby wykonane w menu}
+              {\label{tab:proby}}
+\small
+\begin{tabularx}{\linewidth}{|L{4.8cm}|Y|}
+\hline
+\textbf{Próba} & \textbf{Zaobserwowany wynik}\\ \hline
+Ponowne dodanie liczby 6 & Program zgłosił duplikat.\\ \hline
+Wyszukanie 7 i 42 & Ścieżka do 7 to $8\to3\to6\to7$.
+Program zgłosił brak 42.\\ \hline
+Usunięcie korzenia 8 & Następnikiem został 10. Przejście inorder dało
+$1,3,4,6,7,10,13,14$.\\ \hline
+Zapis tekstowy i binarny & Plik tekstowy zawierał dziewięć wartości
+w kolejności preorder. Odczyt zapisu binarnego po opróżnieniu drzewa
+przywrócił ten sam wynik preorder i ten sam rysunek.\\ \hline
+Odczyt obciętego pliku binarnego & Program zgłosił błąd,
+a drzewo zachowało dotychczasową zawartość.\\ \hline
+Import tekstu \kod{-4 8 9} &
+Przejście inorder dało $-4,8,9$. Powtórzona wartość 8 wystąpiła raz.\\ \hline
+Import tekstu \kod{-4 9x} &
+Program zgłosił błąd. Drzewo nadal zawierało tylko wartość 8.\\ \hline
+\end{tabularx}
+\end{tabela}

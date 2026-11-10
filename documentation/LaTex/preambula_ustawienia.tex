@@ -1,0 +1,62 @@
+% Numeracja i wygląd zgodne z układem przekazanego szablonu.
+\makeatletter
+\def\numberline#1{\hb@xt@\@tempdima{#1.\hfil}}
+\renewcommand*\@seccntformat[1]{\csname the#1\endcsname.\enspace}
+\@addtoreset{equation}{section}
+\renewcommand{\theequation}{\thesection.\arabic{equation}}
+\@addtoreset{figure}{section}
+\renewcommand{\thefigure}{\thesection.\arabic{figure}}
+\@addtoreset{table}{section}
+\renewcommand{\thetable}{\thesection.\arabic{table}}
+\makeatother
+
+\newenvironment{tabela}[3]{%
+  \begin{table}[H]\centering\caption[#1]{#2}\medskip#3%
+}{\end{table}}
+
+\newcommand{\bezligaturkodu}{\ifdefined\pdfnoligatures\pdfnoligatures\font\fi}
+\newcommand{\kod}[1]{\texttt{\bezligaturkodu\detokenize{#1}}}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+% Listing pozostaje przy swoim opisie i nie jest dzielony pomiędzy strony.
+\newcommand{\listingpliku}[2][]{%
+  \par\smallskip\noindent
+  \begin{minipage}{\linewidth}
+    \lstinputlisting[#1]{#2}
+  \end{minipage}
+  \par\smallskip
+}
+
+\frenchspacing
+\setlength{\parindent}{0.6cm}
+\setlength{\parskip}{3pt}
+\linespread{1.3}
+\raggedbottom
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{3}
+\renewcommand{\arraystretch}{1.18}
+\captionsetup[table]{position=top,skip=6pt}
+\captionsetup[figure]{skip=7pt}
+\setlength{\emergencystretch}{2em}
+
+\renewcommand{\cfttoctitlefont}{\Large\bfseries\sffamily}
+\renewcommand{\cftloftitlefont}{\Large\bfseries\sffamily}
+\renewcommand{\cftlottitlefont}{\Large\bfseries\sffamily}
+\renewcommand{\cftsecfont}{\bfseries\sffamily}
+\renewcommand{\cftsubsecfont}{\sffamily}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\footnotesize\textit{AKADEMIA NAUK STOSOWANYCH W NOWYM SĄCZU}}
+\fancyfoot[C]{%
+  \scriptsize DOKUMENTACJA PROJEKTU - ZAAWANSOWANE PROGRAMOWANIE\\
+  \normalsize\sffamily\thepage
+}
+\setlength{\headheight}{20pt}
+\setlength{\footskip}{35pt}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\makeatletter
+\let\ps@plain\ps@fancy
+\makeatother

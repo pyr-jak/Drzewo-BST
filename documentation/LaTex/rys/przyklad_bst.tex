@@ -1,0 +1,26 @@
+\begin{tikzpicture}[
+  wezel/.style={circle,draw,minimum size=6.5mm,inner sep=1pt,font=\small},
+  krawedz/.style={-{Stealth[length=1.6mm]},thin},
+  etykieta/.style={font=\scriptsize,fill=white,inner sep=1pt}
+]
+\node[font=\small\bfseries] at (0.9,0.8) {Przed usunięciem 3};
+\node[font=\small\bfseries] at (6.5,0.8) {Po usunięciu 3};
+
+\node[wezel] (a1) at (0,0) {1};
+\node[wezel] (a2) at (0.9,-0.9) {2};
+\node[wezel] (a3) at (1.8,-1.8) {3};
+\node[wezel] (a8) at (2.7,-2.7) {8};
+\node[wezel] (a5) at (1.8,-3.6) {5};
+\draw[krawedz] (a1) -- node[etykieta,above right] {P} (a2);
+\draw[krawedz] (a2) -- node[etykieta,above right] {P} (a3);
+\draw[krawedz] (a3) -- node[etykieta,above right] {P} (a8);
+\draw[krawedz] (a8) -- node[etykieta,above left] {L} (a5);
+
+\node[wezel] (b1) at (5.6,0) {1};
+\node[wezel] (b2) at (6.5,-0.9) {2};
+\node[wezel] (b8) at (7.4,-1.8) {8};
+\node[wezel] (b5) at (6.5,-2.7) {5};
+\draw[krawedz] (b1) -- node[etykieta,above right] {P} (b2);
+\draw[krawedz] (b2) -- node[etykieta,above right] {P} (b8);
+\draw[krawedz] (b8) -- node[etykieta,above left] {L} (b5);
+\end{tikzpicture}
