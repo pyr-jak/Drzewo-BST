@@ -6,6 +6,7 @@
 #ifndef BST_H
 #define BST_H
 
+#include <cstddef>
 #include <vector>
 #include <string>
 
@@ -46,14 +47,40 @@ private:
      */
     int insert(int currentIndex, int value);
 
-    void preorderHelper(int currentIndex);
+    /**
+     * @brief Rekurencyjnie wypisuje wartosci poddrzewa w kolejnosci inorder.
+     * @param currentIndex Indeks korzenia poddrzewa albo -1 dla pustego poddrzewa.
+     */
     void inorderHelper(int currentIndex);
+
+    /**
+     * @brief Rekurencyjnie wypisuje wartosci poddrzewa w kolejnosci postorder.
+     * @param currentIndex Indeks korzenia poddrzewa albo -1 dla pustego poddrzewa.
+     */
     void postorderHelper(int currentIndex);
+
+    /**
+     * @brief Rekurencyjnie dodaje etykiety i laczniki poddrzewa do rysunku.
+     * @param currentIndex Indeks korzenia poddrzewa albo -1 dla pustego poddrzewa.
+     * @param row Numer wiersza korzenia poddrzewa, liczony od zera.
+     * @param[in,out] nextColumn Nastepna kolumna dostepna przy rozmieszczaniu etykiet.
+     * @param[in,out] lines Wiersze rysunku uzupelniane w trakcie przejscia.
+     * @return Kolumna srodka etykiety korzenia poddrzewa albo @c std::string::npos
+     * dla pustego poddrzewa.
+     */
+    std::size_t drawBranch(int currentIndex, std::size_t row, std::size_t& nextColumn,
+                           std::vector<std::string>& lines) const;
 
 public:
     /** @brief Tworzy puste drzewo. */
     BST();
 
+    /**
+     * @brief Zapisuje wartosci drzewa w kolejnosci preorder, po jednej liczbie w wierszu.
+     * @param fileName Sciezka do pliku tekstowego tworzonego lub nadpisywanego przy zapisie.
+     * @return @c true po pomyslnym zapisie albo @c false w razie bledu otwarcia,
+     * zapisu lub zamkniecia pliku.
+     */
     bool saveToTextFile(const std::string& fileName) const;
 
     /**
@@ -93,9 +120,32 @@ public:
      */
     void removeTree();
 
+    /** @brief Wypisuje wartosci w kolejnosci preorder (wezel, lewe poddrzewo, prawe poddrzewo). */
     void preorder();
+
+    /** @brief Wypisuje wartosci w kolejnosci inorder, czyli w porzadku rosnacym. */
     void inorder();
+
+    /** @brief Wypisuje wartosci w kolejnosci postorder (lewe poddrzewo, prawe poddrzewo, wezel). */
     void postorder();
+
+    /**
+     * @brief Zbiera wartosci drzewa przez iteracyjne przejscie preorder.
+     * @return Wektor wartosci w kolejnosci preorder albo pusty wektor dla pustego drzewa.
+     */
+    std::vector<int> preorderValues() const;
+
+    /**
+     * @brief Wypisuje rysunek drzewa z etykietami wezlow i lacznikami do dzieci.
+     * @note Dla pustego drzewa wypisuje komunikat.
+     */
+    void printTree() const;
+
+    /**
+     * @brief Sprawdza, czy drzewo zawiera podana wartosc.
+     * @param value Szukana wartosc.
+     * @return @c true po znalezieniu wartosci albo @c false w przeciwnym razie.
+     */
     bool findElement(int value) const;
 
     /**
